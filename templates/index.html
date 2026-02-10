@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Prediction</title>
+    <style>
+        body { font-family: Arial; background-color: #f4f4f4; }
+        .container { max-width: 500px; margin: 50px auto; padding: 20px; background: #fff; border-radius: 10px; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        h2 { text-align: center; }
+        .result { font-size: 18px; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Heart Disease Prediction</h2>
+        <form action="/predict" method="post">
+            {% for col in columns %}
+                <label>{{ col.replace('_', ' ').title() }}:</label>
+
+                {% if col in dropdowns %}
+                    <select name="{{ col }}" required>
+                        {% for option in dropdowns[col] %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                {% elif col in numeric_fields %}
+                    <input type="number" name="{{ col }}" step="any" required>
+                {% else %}
+                    <input type="text" name="{{ col }}" required>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result"><strong>{{ prediction_text }}</strong></div>
+        {% endif %}
+    </div>
+</body>
+</html>
